@@ -1,0 +1,28 @@
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class LargeSum {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Read N
+        int N = scanner.nextInt();
+        
+        // Initialize sum as BigInteger
+        BigInteger sum = BigInteger.ZERO;
+        
+        // Read N large numbers and sum them
+        for (int i = 0; i < N; i++) {
+            BigInteger num = new BigInteger(scanner.next());
+            sum = sum.add(num);
+        }
+        
+        // Convert sum to string and extract the first 10 digits
+        String result = sum.toString().substring(0, 10);
+        
+        // Print the result
+        System.out.println(result);
+        
+        scanner.close();
+    }
+}
