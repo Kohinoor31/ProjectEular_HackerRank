@@ -1,0 +1,55 @@
+import java.io.*;
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        // Using BufferedReader for fast input reading since T is large
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        // Using StringBuilder to accumulate results and print them at once (improves performance)
+        StringBuilder output = new StringBuilder();
+
+        // Read the number of test cases (T)
+        int T = Integer.parseInt(br.readLine().trim());
+
+        // Process each test case
+        while (T-- > 0) {
+            // Read N (upper limit for Fibonacci sequence)
+            long N = Long.parseLong(br.readLine().trim());
+
+            // Compute the sum of even Fibonacci numbers up to N
+            output.append(sumEvenFibonacci(N)).append("\n");
+        }
+
+        // Print all results in one go for efficiency
+        System.out.print(output);
+    }
+
+    /**
+     * Function to calculate the sum of even Fibonacci numbers up to N
+     */
+    private static long sumEvenFibonacci(long N) {
+        // First two Fibonacci numbers
+        long a = 1, b = 2;
+
+        // Variable to store the sum of even Fibonacci numbers
+        long sum = 0;
+
+        // Generate Fibonacci numbers until we exceed N
+        while (b <= N) {
+            // If the number is even, add it to the sum
+            if (b % 2 == 0) {
+                sum += b;
+            }
+
+            // Generate the next Fibonacci number
+            long next = a + b;
+            
+            // Update 'a' and 'b' for the next iteration
+            a = b;
+            b = next;
+        }
+
+        // Return the total sum of even Fibonacci numbers up to N
+        return sum;
+    }
+}
