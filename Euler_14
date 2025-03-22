@@ -1,0 +1,51 @@
+import java.util.Scanner;
+
+public class CollatzSequence {
+    static final int LIMIT = 500000;
+    static int[] dp = new int[LIMIT + 1];   // dp[i] is the Collatz chain length for i
+    static int[] best = new int[LIMIT + 1]; // best[i] is the number <= i with the longest chain;
+                                           // if tie, the maximum number is chosen
+
+    public static void main(String[] args) {
+        precompute();
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            System.out.println(best[n]);
+        }
+        sc.close();
+    }
+
+    static void precompute() {
+        dp[1] = 1;
+        best[1] = 1;
+        for (int i = 2; i <= LIMIT; i++) {
+            dp[i] = computeChainLength(i);
+            if (dp[i] >= dp[best[i - 1]]) {
+                best[i] = i;
+            } else {
+                best[i] = best[i - 1];
+            }
+        }
+    }
+
+    static int computeChainLength(int start) {
+        long n = start;
+        int count = 0;
+        while (n != 1 && (n >= LIMIT || dp[(int)n] == 0)) {
+            count++;
+            if ((n & 1) == 0) {
+                n = n / 2;
+            } else {
+                n = 3 * n + 1;
+            }
+        }
+        if (n < LIMIT) {
+            count += dp[(int)n];
+        } else {
+            count++;
+        }
+        return count;
+    }
+}
