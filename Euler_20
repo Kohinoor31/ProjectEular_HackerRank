@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class FactorialDigitSum {
+
+    // Compute the factorial as a list of digits (lowest digit first)
+    public static List<Integer> factorial(int maxFactor) {
+        List<Integer> result = new ArrayList<>();
+        result.add(1);
+
+        // Loop through factors 2 to maxFactor
+        for (int factor = 2; factor <= maxFactor; factor++) {
+            int carry = 0;
+            // Multiply each digit with current factor and handle carry
+            for (int i = 0; i < result.size(); i++) {
+                int prod = result.get(i) * factor + carry;
+                result.set(i, prod % 10);
+                carry = prod / 10;
+            }
+            // Add remaining carry to the list
+            while (carry != 0) {
+                result.add(carry % 10);
+                carry /= 10;
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int tests = scanner.nextInt();
+        while (tests-- > 0) {
+            int number = scanner.nextInt();
+            List<Integer> digits = factorial(number);
+            long sum = 0;
+            for (int digit : digits) {
+                sum += digit;
+            }
+            System.out.println(sum);
+        }
+        scanner.close();
+    }
+}
