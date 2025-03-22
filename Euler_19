@@ -1,0 +1,92 @@
+import java.util.Scanner;
+
+public class CountingSundays {
+    // Constant representing Sunday in our Zeller's Congruence result (0=Saturday, 1=Sunday, ...)
+    private static final int SUNDAY = 1;
+
+    // Zeller's Congruence adapted for our needs:
+    // January and February are treated as months 13 and 14 of the previous year.
+    // Returns: 0 => Saturday, 1 => Sunday, 2 => Monday, ..., 6 => Friday.
+    public static int getWeekday(long year, int month, int day) {
+        if (month <= 2) {
+            month += 12;
+            year--;
+        }
+        // Use integer arithmetic (note: divisions here are integer divisions)
+        long value = day + (13 * (month + 1)) / 5 + year + year / 4 - year / 100 + year / 400;
+        return (int)(value % 7);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int tests = scanner.nextInt();
+        while (tests-- > 0) {
+            // Read the two dates: from-date and to-date.
+            long year1 = scanner.nextLong();
+            int month1 = scanner.nextInt();
+            int day1 = scanner.nextInt();
+            long year2 = scanner.nextLong();
+            int month2 = scanner.nextInt();
+            int day2 = scanner.nextInt();
+            
+            // If the input order is reversed, swap the from-date and to-date (based on year and month)
+            if (year2 < year1 || (year2 == year1 && month2 < month1)) {
+                long tempYear = year1;
+                year1 = year2;
+                year2 = tempYear;
+                
+                int tempMonth = month1;
+                month1 = month2;
+                month2 = tempMonth;
+                
+                int tempDay = day1;
+                day1 = day2;
+                day2 = tempDay;
+            }
+            
+            // Jump forward to the first day of the next month if the starting day is greater than 1.
+            long currentYear = year1;
+            int currentMonth = month1;
+            if (day1 > 1) {
+                currentMonth++;
+                if (currentMonth > 12) {
+                    currentMonth = 1;
+                    currentYear++;
+                }
+            }
+            
+            // Count the number of Sundays on the first of the month
+            long sum = 0;
+            
+            // Use the 2800-year cycle optimization:
+            // In 2800 years there are exactly 4816 Sundays that fall on the first of a month.
+            while (currentYear + 2800 < year2) {
+                currentYear += 2800;
+                sum += 4816;
+            }
+            
+            // Iterate month-by-month until we reach the "to" date.
+            // Note: Since we're only checking first of each month, we compare only year and month.
+            while (currentYear < year2 || (currentYear == year2 && currentMonth < month2)) {
+                if (getWeekday(currentYear, currentMonth, 1) == SUNDAY) {
+                    sum++;
+                }
+                
+                // Move to the next month.
+                currentMonth++;
+                if (currentMonth > 12) {
+                    currentMonth = 1;
+                    currentYear++;
+                }
+            }
+            
+            // Check the last month as well.
+            if (getWeekday(currentYear, currentMonth, 1) == SUNDAY) {
+                sum++;
+            }
+            
+            System.out.println(sum);
+        }
+        scanner.close();
+    }
+}
