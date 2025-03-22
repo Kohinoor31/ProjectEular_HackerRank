@@ -1,0 +1,38 @@
+import java.io.*;
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+
+        StringBuilder output = new StringBuilder();
+        while (T-- > 0) {
+            long N = Long.parseLong(br.readLine().trim());
+            output.append(largestPrimeFactor(N)).append("\n");
+        }
+        System.out.print(output);
+    }
+
+    private static long largestPrimeFactor(long N) {
+        long largest = -1;
+
+        // Remove factor of 2
+        while (N % 2 == 0) {
+            largest = 2;
+            N /= 2;
+        }
+
+        // Check for odd factors up to sqrt(N)
+        for (long i = 3; i * i <= N; i += 2) {
+            while (N % i == 0) {
+                largest = i;
+                N /= i;
+            }
+        }
+
+        // If N is still > 1, it is a prime number
+        if (N > 1) largest = N;
+
+        return largest;
+    }
+}
