@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class GreatestProductGrid {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int[][] grid = new int[20][20];
+        
+        // Reading input
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                grid[i][j] = scanner.nextInt();
+            }
+        }
+        
+        scanner.close();
+        
+        int maxProduct = 0;
+        
+        // Check horizontally
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 17; j++) {
+                int product = grid[i][j] * grid[i][j + 1] * grid[i][j + 2] * grid[i][j + 3];
+                maxProduct = Math.max(maxProduct, product);
+            }
+        }
+        
+        // Check vertically
+        for (int i = 0; i < 17; i++) {
+            for (int j = 0; j < 20; j++) {
+                int product = grid[i][j] * grid[i + 1][j] * grid[i + 2][j] * grid[i + 3][j];
+                maxProduct = Math.max(maxProduct, product);
+            }
+        }
+        
+        // Check diagonally (top-left to bottom-right)
+        for (int i = 0; i < 17; i++) {
+            for (int j = 0; j < 17; j++) {
+                int product = grid[i][j] * grid[i + 1][j + 1] * grid[i + 2][j + 2] * grid[i + 3][j + 3];
+                maxProduct = Math.max(maxProduct, product);
+            }
+        }
+        
+        // Check diagonally (bottom-left to top-right)
+        for (int i = 3; i < 20; i++) {
+            for (int j = 0; j < 17; j++) {
+                int product = grid[i][j] * grid[i - 1][j + 1] * grid[i - 2][j + 2] * grid[i - 3][j + 3];
+                maxProduct = Math.max(maxProduct, product);
+            }
+        }
+        
+        // Print the maximum product found
+        System.out.println(maxProduct);
+    }
+}
