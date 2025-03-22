@@ -1,0 +1,51 @@
+import java.util.*;
+import java.io.*;
+
+public class NthPrime {
+    static final int LIMIT = 10000;  // We need the first 10^4 prime numbers
+    static List<Integer> primes = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException {
+        // Precompute the first 10^4 primes using Sieve of Eratosthenes
+        precomputePrimes(200000); // A safe limit to get at least 10^4 primes
+
+        // Fast input reading
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder output = new StringBuilder();
+        
+        // Read number of test cases
+        int T = Integer.parseInt(br.readLine());
+
+        // Process each test case
+        for (int i = 0; i < T; i++) {
+            int N = Integer.parseInt(br.readLine()); // Read N
+            output.append(primes.get(N - 1)).append("\n"); // Get N-th prime (0-based index)
+        }
+
+        // Print all results efficiently
+        System.out.print(output);
+    }
+
+    /**
+     * Precomputes the first 10^4 prime numbers using the Sieve of Eratosthenes.
+     * @param size The upper bound to generate primes (chosen as 200000 for safety).
+     */
+    static void precomputePrimes(int size) {
+        boolean[] isPrime = new boolean[size];  // Prime sieve
+        Arrays.fill(isPrime, true);
+        isPrime[0] = isPrime[1] = false; // 0 and 1 are not prime numbers
+
+        // Apply Sieve of Eratosthenes
+        for (int num = 2; num < size; num++) {
+            if (isPrime[num]) {
+                primes.add(num); // Store the prime number
+                if (primes.size() == LIMIT) return; // Stop once we have 10^4 primes
+                
+                // Mark multiples of num as non-prime
+                for (int multiple = num * 2; multiple < size; multiple += num) {
+                    isPrime[multiple] = false;
+                }
+            }
+        }
+    }
+}
