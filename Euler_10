@@ -1,0 +1,46 @@
+import java.util.*;
+
+public class Main {
+    static final int LIMIT = 1000000; // Upper bound for N
+    static long[] primeSum = new long[LIMIT + 1]; // Stores sum of primes up to N
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt(); // Number of test cases
+
+        sieve(); // Precompute primes and their sums
+
+        StringBuilder sb = new StringBuilder(); // Use StringBuilder for fast output
+        while (T-- > 0) {
+            int N = sc.nextInt();
+            sb.append(primeSum[N]).append("\n");
+        }
+        
+        System.out.print(sb.toString()); // Print all results at once
+        sc.close();
+    }
+
+    // Sieve of Eratosthenes to precompute prime sums
+    static void sieve() {
+        boolean[] isPrime = new boolean[LIMIT + 1];
+        Arrays.fill(isPrime, true);
+        isPrime[0] = isPrime[1] = false; // 0 and 1 are not prime
+        
+        for (int i = 2; i * i <= LIMIT; i++) {
+            if (isPrime[i]) {
+                for (int j = i * i; j <= LIMIT; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+
+        // Compute prefix sum of primes
+        for (int i = 1; i <= LIMIT; i++) {
+            if (isPrime[i]) {
+                primeSum[i] = primeSum[i - 1] + i;
+            } else {
+                primeSum[i] = primeSum[i - 1];
+            }
+        }
+    }
+}
