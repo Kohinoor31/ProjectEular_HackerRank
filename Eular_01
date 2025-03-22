@@ -1,0 +1,27 @@
+import java.io.*;
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder output = new StringBuilder();
+        int T = Integer.parseInt(br.readLine().trim());
+
+        while (T-- > 0) {
+            int N = Integer.parseInt(br.readLine().trim());
+            output.append(sumOfMultiples(N)).append("\n");
+        }
+
+        System.out.print(output);
+    }
+
+    private static long sumOfMultiples(int N) {
+        N--; // Consider numbers below N
+
+        return sumDivisibleBy(N, 3) + sumDivisibleBy(N, 5) - sumDivisibleBy(N, 15);
+    }
+
+    private static long sumDivisibleBy(int N, int k) {
+        long m = N / k;
+        return k * m * (m + 1) / 2;
+    }
+}
