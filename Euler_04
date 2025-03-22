@@ -1,0 +1,46 @@
+import java.io.*;
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        StringBuilder output = new StringBuilder();
+
+        while (T-- > 0) {
+            int N = Integer.parseInt(br.readLine().trim());
+            output.append(findLargestPalindrome(N)).append("\n");
+        }
+
+        System.out.print(output);
+    }
+
+    private static int findLargestPalindrome(int N) {
+        for (int p = N - 1; p >= 101101; p--) {
+            if (isPalindrome(p) && hasThreeDigitFactors(p)) {
+                return p;
+            }
+        }
+        return -1; // Should not reach here based on constraints
+    }
+
+    private static boolean isPalindrome(int num) {
+        int reversed = 0, original = num;
+        while (num > 0) {
+            reversed = reversed * 10 + num % 10;
+            num /= 10;
+        }
+        return original == reversed;
+    }
+
+    private static boolean hasThreeDigitFactors(int num) {
+        for (int i = 999; i >= 100; i--) {
+            if (num % i == 0) { // Check if i is a factor
+                int quotient = num / i;
+                if (quotient >= 100 && quotient <= 999) { // Ensure both are 3-digit numbers
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
