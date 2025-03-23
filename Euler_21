@@ -1,0 +1,37 @@
+import java.util.*;
+
+public class AmicableNumbers {
+    static final int MAX = 100000;
+    static int[] sumOfDivisors = new int[MAX + 1];
+    static int[] amicableSum = new int[MAX + 1];
+
+    // Function to calculate the sum of proper divisors for each number up to MAX
+    private static void precomputeDivisors() {
+        for (int i = 1; i <= MAX; i++) {
+            for (int j = 2 * i; j <= MAX; j += i) {
+                sumOfDivisors[j] += i;
+            }
+        }
+
+        // Compute the sum of all amicable numbers up to each number
+        for (int i = 1; i <= MAX; i++) {
+            int d = sumOfDivisors[i];
+            if (d != i && d <= MAX && sumOfDivisors[d] == i) {
+                amicableSum[i] = i;
+            }
+            amicableSum[i] += amicableSum[i - 1]; // Prefix sum for quick queries
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        precomputeDivisors();
+        
+        int T = scanner.nextInt(); // Number of test cases
+        while (T-- > 0) {
+            int N = scanner.nextInt();
+            System.out.println(amicableSum[N]); // Fetch precomputed sum
+        }
+        scanner.close();
+    }
+}
