@@ -1,0 +1,44 @@
+import java.util.*;
+
+public class LexicographicPermutation {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // Read number of test cases
+        int T = sc.nextInt();
+
+        // Precompute factorials up to 13!
+        long[] fact = new long[14];
+        fact[0] = 1;
+        for (int i = 1; i <= 13; i++) {
+            fact[i] = fact[i - 1] * i;
+        }
+
+        // Process each query
+        while (T-- > 0) {
+            int N = sc.nextInt();
+            System.out.println(getNthPermutation(N, fact));
+        }
+
+        sc.close();
+    }
+
+    // Function to compute the Nth lexicographic permutation
+    private static String getNthPermutation(int N, long[] fact) {
+        List<Character> characters = new ArrayList<>(Arrays.asList(
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'
+        ));
+
+        StringBuilder result = new StringBuilder();
+        N--; // Convert to 0-based index
+
+        for (int i = 12; i >= 0; i--) {
+            int index = (int) (N / fact[i]); // Find position
+            result.append(characters.get(index)); // Add the selected character
+            characters.remove(index); // Remove used character
+            N %= fact[i]; // Update N for next position
+        }
+
+        return result.toString();
+    }
+}
