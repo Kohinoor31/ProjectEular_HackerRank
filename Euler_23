@@ -1,0 +1,59 @@
+import java.util.*;
+
+public class AbundantNumbers {
+    static final int MAX_N = 100000;
+    static boolean[] isAbundant = new boolean[MAX_N + 1];
+    static boolean[] isSumOfAbundant = new boolean[MAX_N + 1];
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        precomputeAbundantNumbers();
+
+        int T = sc.nextInt(); // Number of test cases
+        while (T-- > 0) {
+            int N = sc.nextInt();
+            System.out.println(isSumOfAbundant[N] ? "YES" : "NO");
+        }
+
+        sc.close();
+    }
+
+    // Function to compute sum of proper divisors of n
+    private static int sumOfDivisors(int n) {
+        int sum = 1; // 1 is always a proper divisor
+        int sqrt = (int) Math.sqrt(n);
+
+        for (int i = 2; i <= sqrt; i++) {
+            if (n % i == 0) {
+                sum += i;
+                if (i != n / i) sum += n / i;
+            }
+        }
+
+        return sum;
+    }
+
+    // Precompute all abundant numbers and their sums
+    private static void precomputeAbundantNumbers() {
+        List<Integer> abundantList = new ArrayList<>();
+
+        for (int i = 1; i <= MAX_N; i++) {
+            if (sumOfDivisors(i) > i) {
+                isAbundant[i] = true;
+                abundantList.add(i);
+            }
+        }
+
+        // Compute all possible sums of two abundant numbers
+        for (int i = 0; i < abundantList.size(); i++) {
+            for (int j = i; j < abundantList.size(); j++) {
+                int sum = abundantList.get(i) + abundantList.get(j);
+                if (sum <= MAX_N) {
+                    isSumOfAbundant[sum] = true;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+}
