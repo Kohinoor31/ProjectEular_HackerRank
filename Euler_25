@@ -1,0 +1,29 @@
+import java.util.*;
+
+public class FibonacciDigitIndex {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Read number of test cases
+        int T = sc.nextInt();
+
+        // Constants
+        double phi = (1 + Math.sqrt(5)) / 2;
+        double log10phi = Math.log10(phi);
+        double log10sqrt5 = Math.log10(Math.sqrt(5));
+
+        // Precompute first Fibonacci index for each N up to 5000
+        int[] firstFibWithNDigits = new int[5001]; 
+        for (int N = 2; N <= 5000; N++) {
+            firstFibWithNDigits[N] = (int) Math.ceil(((N - 1) + log10sqrt5) / log10phi);
+        }
+
+        // Process each query
+        while (T-- > 0) {
+            int N = sc.nextInt();
+            System.out.println(firstFibWithNDigits[N]);
+        }
+
+        sc.close();
+    }
+}
