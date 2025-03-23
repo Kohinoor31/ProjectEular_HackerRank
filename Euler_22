@@ -1,0 +1,45 @@
+import java.util.*;
+
+public class NameScores {
+    // Function to compute the alphabetical value of a name
+    static int getAlphabeticalValue(String name) {
+        int value = 0;
+        for (char ch : name.toCharArray()) {
+            value += (ch - 'A' + 1); // A=1, B=2, ..., Z=26
+        }
+        return value;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();  // Number of names
+        sc.nextLine(); // Consume newline
+        
+        List<String> names = new ArrayList<>();
+        
+        for (int i = 0; i < N; i++) {
+            names.add(sc.nextLine().trim()); // Read names and trim spaces
+        }
+        
+        // Sort names lexicographically
+        Collections.sort(names);
+
+        // Precompute name scores
+        Map<String, Integer> nameScoreMap = new HashMap<>();
+        
+        for (int i = 0; i < N; i++) {
+            int nameValue = getAlphabeticalValue(names.get(i));
+            nameScoreMap.put(names.get(i), (i + 1) * nameValue);
+        }
+
+        int Q = sc.nextInt(); // Number of queries
+        sc.nextLine(); // Consume newline
+        
+        while (Q-- > 0) {
+            String queryName = sc.nextLine().trim();
+            System.out.println(nameScoreMap.get(queryName)); // Output the precomputed score
+        }
+
+        sc.close();
+    }
+}
