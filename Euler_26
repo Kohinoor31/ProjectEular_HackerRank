@@ -1,0 +1,81 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt(); // Number of test cases
+        
+        // Process each test case
+        for (int t = 0; t < T; t++) {
+            int n = sc.nextInt(); // Input n for this test case
+            int result = findLongestRecurringCycle(n);
+            System.out.println(result);
+        }
+        
+        sc.close();
+    }
+    
+    // Find the denominator d < n with the longest recurring cycle
+    public static int findLongestRecurringCycle(int n) {
+        if (n <= 2) return 0; // No recurring cycles for d < 2
+        
+        // Step 1: Generate all primes less than n using Sieve of Eratosthenes
+        boolean[] isPrime = new boolean[n];
+        Arrays.fill(isPrime, true);
+        isPrime[0] = isPrime[1] = false;
+        for (int i = 2; i * i < n; i++) {
+            if (isPrime[i]) {
+                for (int j = i * i; j < n; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+        
+        // Collect primes into a list
+        ArrayList<Integer> primes = new ArrayList<>();
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i]) {
+                primes.add(i);
+            }
+        }
+        
+        // Step 2: For each prime, compute the cycle length
+        int longestCycle = 0;
+        int result = 0;
+        
+        for (int p : primes) {
+            // Skip primes 2 and 5 as they produce terminating decimals
+            if (p == 2 || p == 5) continue;
+            
+            // Compute the cycle length (multiplicative order of 10 mod p)
+            int cycleLength = getCycleLength(p);
+            if (cycleLength > longestCycle) {
+                longestCycle = cycleLength;
+                result = p;
+            }
+        }
+        
+        return result;
+    }
+    
+    // Compute the cycle length of 1/p (multiplicative order of 10 mod p)
+    public static int getCycleLength(int p) {
+        // Find the smallest k such that 10^k = 1 (mod p)
+        long power = 1;
+        int k = 1;
+        while (true) {
+            power = (power * 10) % p;
+            if (power == 1) {
+                return k;
+            }
+            k++;
+            // For a prime p, the cycle length must divide p-1
+            if (k > p - 1) {
+                break; // Shouldn't happen for valid cases
+            }
+        }
+        return 0; // Shouldn't reach here
+    }
+}
